@@ -5,9 +5,15 @@ import chalk from 'chalk';
 
 const app = express();
 
+//Imports routers
+import signupRouter from './routes/signupRouter.js';
+
 app.use(cors());
 app.use(json());
 dotenv.config();
+
+//Routes for the API
+app.use(signupRouter);
 
 const port = process.env.PORT || 4000;
 
