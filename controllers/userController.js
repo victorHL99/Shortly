@@ -1,7 +1,7 @@
 import db from '../db.js';
 
 export async function registerUser(req, res) {
-    const {name,email, password, confirmPassword } = req.body;
+    const {name} = req.body;
 
     try{
         const resultUsers = await db.query('SELECT * FROM users WHERE name = $1', [name]);
