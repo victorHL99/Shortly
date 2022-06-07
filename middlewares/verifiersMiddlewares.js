@@ -18,15 +18,5 @@ export async function vPostRegisterUser(req,res,next){
         res.status(422).send(verifyUser)
     }
 
-    try{
-        const resultUsers = await db.query('SELECT * FROM users WHERE name = $1', [name]);
-        if(resultUsers.rows.length > 0){
-            res.sendStatus(409);
-            return;
-        } else {
-            next();
-        }
-    } catch(error){
-        res.sendStatus(500);
-    }
+    next();
 }
