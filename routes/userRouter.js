@@ -11,7 +11,6 @@ import {vPostRegisterUser} from '../middlewares/verifiersMiddlewares.js';
 
 const userRouter = Router();
 
-console.log("passou aqui");
 
 userRouter.post("/signup",vPostRegisterUser, registerUser);
 //userRouter.post("/signin",vPostRegisterUser, loginUser)

@@ -3,7 +3,6 @@ import Joi from "joi";
 
 
 export async function vPostRegisterUser(req,res,next){
-    console.log("passou aqui middleware");
     const {name,email, password, confirmPassword } = req.body;
 
     const schema  = Joi.object({

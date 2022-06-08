@@ -20,6 +20,6 @@ const db = new Pool({
     database
 });
 
-    console.log(chalk.green('Connected to database'));
+    console.log(chalk.blue('Connected to database'));
 
     export default db;
