@@ -3,7 +3,7 @@ import {Router} from 'express';
 //Imports controllers
 import {
     registerUser,
-    //loginUser 
+    loginUser 
 } from '../controllers/userController.js';
 
 //Imports Middlewares
@@ -13,7 +13,7 @@ const userRouter = Router();
 
 
 userRouter.post("/signup",vPostRegisterUser, registerUser);
-//userRouter.post("/signin",vPostRegisterUser, loginUser)
+userRouter.post("/signin",vPostRegisterUser, loginUser)
 
 
 export default userRouter;
