@@ -7,7 +7,7 @@ export async function vPostRegisterUser(req,res,next){
 
     const schema  = Joi.object({
         name: Joi.string().required(),
-        email: Joi.string().required().email(),
+        email: Joi.string().email().required(),
         password: Joi.string().required().alphanum().min(6),
         confirmPassword: Joi.string().required().alphanum().min(6)
     })
@@ -15,8 +15,9 @@ export async function vPostRegisterUser(req,res,next){
     const verifyUser = schema.validate({name,email,password,confirmPassword}).error;
 
     if(verifyUser){
-        res.status(422).send(verifyUser)
-    }
+        res.status(422).send(verifyUser.details[0].message);
+        return;
+    } 
 
     next();
 }
