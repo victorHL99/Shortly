@@ -21,3 +21,21 @@ export async function vPostRegisterUser(req,res,next){
 
     next();
 }
+
+export async function vPostLoginUser(req,res,next){
+    const { email, password } = req.body;
+
+    const schema  = Joi.object({
+        email: Joi.string().email().required(),
+        password: Joi.string().required().alphanum().min(6),
+    })
+
+    const verifyUser = schema.validate({email,password}).error;
+
+    if(verifyUser){
+        res.status(422).send(verifyUser.details[0].message);
+        return;
+    } 
+
+    next();
+}
