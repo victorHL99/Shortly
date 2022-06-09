@@ -39,3 +39,7 @@ export async function vPostLoginUser(req,res,next){
 
     next();
 }
+
+export async function vPostRegisterUrl(req, res, next){
+    next();
+}
