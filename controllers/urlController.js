@@ -43,5 +43,22 @@ export async function registerUrl(req,res){
 }
 
 export async function showUrl(req,res){
-    
+    const { id } = req.params;
+
+    try {
+        const result = await db.query(
+            `SELECT * FROM links 
+            WHERE id = '${id}'`);
+
+        if(result.rows.length === 0){
+            res.status(404).send("Url não encontrada");
+            return;
+        }
+
+        res.status(200).send(result.rows[0]);
+
+    } catch(error){
+        console.log(error);
+        res.sendStatus(500);
+    }
 }
