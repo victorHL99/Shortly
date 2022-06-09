@@ -91,3 +91,7 @@ export async function redirectUrl(req,res){
         res.sendStatus(500);
     }
 }
+
+export async function deleteUrl(req,res){
+    
+}
