@@ -105,6 +105,16 @@ export async function deleteUrl(req,res){
             WHERE sessions.token = '${token}'`
         );
 
+        const searchLinkId = await db.query(`
+            SELECT links.id FROM links 
+            WHERE links.id = '${id}'
+        `);
+
+        if(searchLinkId.rows.length === 0){
+            res.status(404).send("Url não encontrada");
+            return;
+        }
+
         const result = await db.query(`
             SELECT * FROM links
             WHERE "creatorId" = '${creatorId.rows[0].id}'
