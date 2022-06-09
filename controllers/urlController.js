@@ -1,5 +1,5 @@
 import db from '../db.js';
 
-export async function resgisterUrl(req,res){
-    
+export async function registerUrl(req,res){
+
 }
