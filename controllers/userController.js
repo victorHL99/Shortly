@@ -57,3 +57,61 @@ export async function loginUser(req, res) {
         res.sendStatus(500);
     }
 }
+
+export async function showAllUrlsForUser(req,res){
+    const { authorization } = req.headers;
+    const token = authorization?.replace('Bearer ', '').trim();
+
+    try {
+        if(!token){
+            res.status(401).send("Não autorizado");
+            return;
+        }
+
+        const resultSession = await db.query(`SELECT * FROM sessions WHERE token = '${token}'`);
+        if(resultSession.rows.length === 0){
+            res.status(404).send("Usuário não encontrado");
+            return;
+        }
+
+        const creatorInfo = await db.query(`
+            SELECT users.id, users.name FROM users
+            JOIN sessions
+            ON sessions."userId" = users."id"
+            WHERE sessions.token = '${token}'
+            `);
+
+        console.log(creatorInfo.rows[0]);
+
+        const resultLinks = await db.query(`
+            SELECT * FROM links
+            WHERE "creatorId" = '${resultSession.rows[0].userId}'
+        `);
+
+        const SumViews = await db.query(`
+            SELECT SUM(views) FROM links
+            WHERE "creatorId" = '${resultSession.rows[0].userId}'
+        `);
+
+        const arrayLinks = resultLinks.rows.map(link => {
+            return {
+                "id": link.id,
+                "url": link.originalLink,
+                "shortUrl": link.shortlyLink,
+                "visitCount": link.views,
+            }
+        });
+
+        const response = {
+            "id": creatorInfo.rows[0].id,
+            "name": creatorInfo.rows[0].name,
+            "visitCount": SumViews.rows[0].sum,
+            "shortenedUrls": arrayLinks,
+        }
+
+        res.status(200).send(response)
+    } catch(error){
+        console.log(error);
+        res.sendStatus(500);
+    }
+}
