@@ -12,5 +12,4 @@ const userRouter = Router();
 userRouter.post("/signup",vPostRegisterUser, registerUser);
 userRouter.post("/signin",vPostLoginUser, loginUser);
 
-
 export default userRouter;
