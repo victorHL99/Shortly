@@ -41,3 +41,7 @@ export async function registerUrl(req,res){
         res.sendStatus(500);
     }
 }
+
+export async function showUrl(req,res){
+    
+}
