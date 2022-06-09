@@ -62,3 +62,32 @@ export async function showUrl(req,res){
         res.sendStatus(500);
     }
 }
+
+export async function redirectUrl(req,res){
+    const { shortUrl } = req.params;
+    console.log(shortUrl);
+
+    try {
+        const result = await db.query(
+            `SELECT * FROM links
+            WHERE "shortlyLink" = '${shortUrl}'`);
+
+        if(result.rows.length === 0){
+            res.status(404).send("Url não encontrada");
+            return;
+        }
+
+        const link = result.rows[0];
+        link.views++;
+        await db.query(
+            `UPDATE links
+            SET views = $1
+            WHERE id = $2`,
+            [link.views, link.id]);
+
+        res.redirect(link.originalLink);
+    } catch(error){
+        console.log(error);
+        res.sendStatus(500);
+    }
+}
