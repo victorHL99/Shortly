@@ -39,3 +39,21 @@ export async function vPostLoginUser(req,res,next){
 
     next();
 }
+
+export async function vPostRegisterUrl(req, res, next){
+    const { url } = req.body;
+
+    const schema = Joi.object({
+        url: Joi.string().required().pattern(/^(http|https):\/\/[^ "]+$/),
+    })
+
+    const verifyUrl = schema.validate({url}).error;
+
+    if(verifyUrl){
+        res.status(422).send(verifyUrl.details[0].message);
+        return;
+    }
+
+    next();
+
+}
