@@ -91,3 +91,49 @@ export async function redirectUrl(req,res){
         res.sendStatus(500);
     }
 }
+
+export async function deleteUrl(req,res){
+    const { authorization } = req.headers;
+    const token = authorization?.replace('Bearer ', '').trim();
+    const { id } = req.params;
+
+    try {
+        const creatorId = await db.query(
+            `SELECT users.id FROM users
+            JOIN sessions
+            ON sessions."userId" = users."id"
+            WHERE sessions.token = '${token}'`
+        );
+
+        const searchLinkId = await db.query(`
+            SELECT links.id FROM links 
+            WHERE links.id = '${id}'
+        `);
+
+        if(searchLinkId.rows.length === 0){
+            res.status(404).send("Url não encontrada");
+            return;
+        }
+
+        const result = await db.query(`
+            SELECT * FROM links
+            WHERE "creatorId" = '${creatorId.rows[0].id}'
+        `)
+
+        if(result.rows.length === 0){
+            res.status(401).send("Não autorizado");
+            return;
+        }
+
+        await db.query(`
+            DELETE FROM links
+            WHERE links."creatorId" = '${creatorId.rows[0].id}'
+            AND links.id = '${id}'
+        `);
+
+        res.sendStatus(204);
+    } catch(error){
+        console.log(error);
+        res.sendStatus(500);
+    }
+}
