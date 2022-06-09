@@ -44,7 +44,7 @@ export async function vPostRegisterUrl(req, res, next){
     const { url } = req.body;
 
     const schema = Joi.object({
-        url: Joi.string().required().uri(),
+        url: Joi.string().required().pattern(/^(http|https):\/\/[^ "]+$/),
     })
 
     const verifyUrl = schema.validate({url}).error;
