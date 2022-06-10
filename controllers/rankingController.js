@@ -14,12 +14,13 @@ export async function showRanking(req, res) {
             LIMIT 10;
         `)
 
+
         const arrayUsersForRanking = resultUsersForRanking.rows.map(user => {
             return {
                 "id": user.id,
                 "name": user.name,
                 "linksCount": user.linksCount,
-                "visitCount": user.viewsMax,
+                "visitCount": ((user.viewsMax === null) ? 0 : user.viewsMax),
             }
         }
         )
