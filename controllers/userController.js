@@ -58,6 +58,8 @@ export async function showAllUrlsForUser(req,res){
     const { authorization } = req.headers;
     const token = authorization?.replace('Bearer ', '').trim();
     const { id } = req.params;
+    console.log(token);
+    console.log(id);
 
     try {
         if(!token){
@@ -78,6 +80,8 @@ export async function showAllUrlsForUser(req,res){
             WHERE sessions.token = '${token}'
             `);
 
+            console.log(creatorInfo.rows[0].id);
+
 
         const resultLinks = await db.query(`
             SELECT * FROM links
@@ -93,7 +97,7 @@ export async function showAllUrlsForUser(req,res){
             res.status(401).send("Não autorizado");
             return;
         }
-        
+
         const arrayLinks = resultLinks.rows.map(link => {
             return {
                 "id": link.id,
