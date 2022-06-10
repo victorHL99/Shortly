@@ -4,8 +4,11 @@ export async function showRanking(req, res) {
     try {
         const resultUsersForRanking = await db.query(`
             SELECT u.id, u.name, 
-            COUNT(l."shortlyLink") AS "linksCount", 
-            COALESCE(SUM(l."views")) AS "viewsMax"
+            COUNT(l."shortlyLink") AS "linksCount",
+            CASE
+                WHEN COALESCE(SUM(l."views")) IS NULL THEN 0
+                ELSE COALESCE(SUM(l."views")) 
+            END AS "viewsMax"
             FROM users u 
             LEFT JOIN links l
             ON u.id = l."creatorId"
@@ -20,7 +23,7 @@ export async function showRanking(req, res) {
                 "id": user.id,
                 "name": user.name,
                 "linksCount": user.linksCount,
-                "visitCount": ((user.viewsMax === null) ? 0 : user.viewsMax),
+                "visitCount": user.viewsMax,
             }
         }
         )
