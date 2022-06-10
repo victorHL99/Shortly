@@ -93,6 +93,22 @@ export async function deleteUrl(req,res){
     const { id } = req.params;
 
     try {
+        const resultSession = await db.query(`SELECT * FROM sessions WHERE token = '${token}'`);
+        if(resultSession.rows.length === 0){
+            res.status(401).send("Token inválido");
+            return;
+        }
+
+        const result = await db.query(
+            `SELECT * FROM links
+            WHERE id = '${id}'`);
+
+        if(result.rows.length === 0){
+            res.status(404).send("Url não encontrada");
+            return;
+        }
+
+        const link = result.rows[0];
         const creatorId = await db.query(
             `SELECT users.id FROM users
             JOIN sessions
@@ -100,31 +116,15 @@ export async function deleteUrl(req,res){
             WHERE sessions.token = '${token}'`
         );
 
-        const searchLinkId = await db.query(`
-            SELECT links.id FROM links 
-            WHERE links.id = '${id}'
-        `);
-
-        if(searchLinkId.rows.length === 0){
-            res.status(404).send("Url não encontrada");
-            return;
-        }
-
-        const result = await db.query(`
-            SELECT * FROM links
-            WHERE "creatorId" = '${creatorId.rows[0].id}'
-        `)
-
-        if(result.rows.length === 0){
+        if(link.creatorId !== creatorId.rows[0].id){
             res.status(401).send("Não autorizado");
             return;
         }
 
-        await db.query(`
-            DELETE FROM links
-            WHERE links."creatorId" = '${creatorId.rows[0].id}'
-            AND links.id = '${id}'
-        `);
+        await db.query(
+            `DELETE FROM links
+            WHERE id = $1`,
+            [id]);
 
         res.sendStatus(204);
     } catch(error){
