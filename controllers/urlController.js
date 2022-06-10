@@ -23,7 +23,6 @@ export async function registerUrl(req,res){
         );
 
         const newUrl = nanoid(10);
-        console.log(newUrl);
 
         const response = {
             "shortUrl": `${newUrl}`,
@@ -37,7 +36,6 @@ export async function registerUrl(req,res){
         res.status(201).send(response);
         
     } catch(error){
-        console.log(error);
         res.sendStatus(500);
     }
 }
@@ -58,14 +56,12 @@ export async function showUrl(req,res){
         res.status(200).send(result.rows[0]);
 
     } catch(error){
-        console.log(error);
         res.sendStatus(500);
     }
 }
 
 export async function redirectUrl(req,res){
     const { shortUrl } = req.params;
-    console.log(shortUrl);
 
     try {
         const result = await db.query(
@@ -87,7 +83,6 @@ export async function redirectUrl(req,res){
 
         res.redirect(link.originalLink);
     } catch(error){
-        console.log(error);
         res.sendStatus(500);
     }
 }
@@ -133,7 +128,6 @@ export async function deleteUrl(req,res){
 
         res.sendStatus(204);
     } catch(error){
-        console.log(error);
         res.sendStatus(500);
     }
 }

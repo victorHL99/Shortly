@@ -25,7 +25,6 @@ export async function showRanking(req, res) {
         )
         res.status(200).send(arrayUsersForRanking);
     } catch (error) {
-        console.log(error);
         res.sendStatus(500);
     }
 }

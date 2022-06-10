@@ -21,7 +21,6 @@ export async function registerUser(req, res) {
         const user = await db.query(`INSERT INTO users (name,email,password) VALUES ($1,$2,$3)`, [name,email,encryptedPassword]);
         res.sendStatus(201)
     } catch(error){
-        console.log(error);
         res.sendStatus(500);
     }
 }
@@ -39,7 +38,6 @@ export async function loginUser(req, res) {
 
         const user = resultUser.rows[0];
         const isPasswordValid = await bcrypt.compareSync(password, user.password);
-        console.log(user.id)
 
         if(!isPasswordValid){
             res.status(401).send("Senha incorreta");
@@ -47,13 +45,11 @@ export async function loginUser(req, res) {
         }
 
         const token = v4();
-        console.log(token);
 
         await db.query(`INSERT INTO sessions (token, "userId") VALUES ($1,$2)`, [token, user.id]);
 
         res.status(200).send(token);
     } catch(error){
-        console.log(error);
         res.sendStatus(500);
     }
 }
@@ -81,7 +77,6 @@ export async function showAllUrlsForUser(req,res){
             WHERE sessions.token = '${token}'
             `);
 
-        console.log(creatorInfo.rows[0]);
 
         const resultLinks = await db.query(`
             SELECT * FROM links
@@ -111,7 +106,6 @@ export async function showAllUrlsForUser(req,res){
 
         res.status(200).send(response)
     } catch(error){
-        console.log(error);
         res.sendStatus(500);
     }
 }

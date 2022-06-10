@@ -1,6 +1,11 @@
 import { Router } from 'express';
 
-import { registerUrl, showUrl, redirectUrl, deleteUrl} from '../controllers/urlController.js';
+import { 
+    registerUrl, 
+    showUrl,
+    redirectUrl, 
+    deleteUrl
+} from '../controllers/urlController.js';
 
 import { vPostRegisterUrl } from '../middlewares/verifiersMiddlewares.js';
 
