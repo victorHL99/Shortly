@@ -16,7 +16,7 @@ const userRouter = Router();
 
 userRouter.post("/signup",vPostRegisterUser, registerUser);
 userRouter.post("/signin",vPostLoginUser, loginUser);
-userRouter.get("/users", showAllUrlsForUser);
+userRouter.get("/users/:id", showAllUrlsForUser);
 
 
 export default userRouter;
