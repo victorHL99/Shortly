@@ -20,11 +20,11 @@ export async function showRanking(req, res) {
                 "id": user.id,
                 "name": user.name,
                 "linksCount": user.linksCount,
-                "visitCount": ((user.viewsMax === null) ? 0 : user.viewsMax),
+                "visitCount": user.viewsMax,
             }
         }
         )
-        res.status(200).send(arrayUsersForRanking);
+        res.status(200).send(resultUsersForRanking.rows);
     } catch (error) {
         res.sendStatus(500);
     }
