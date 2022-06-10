@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import chalk from 'chalk';
 
 const app = express();
+dotenv.config();
 
 import userRouter from './routes/userRouter.js';
 import urlsRouter from './routes/urlsRouter.js';
@@ -17,7 +18,7 @@ app.use(userRouter);
 app.use(urlsRouter);
 app.use(rankingRouter);
 
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 5000;
 
 app.listen(port,()=>{
     console.log(chalk.green(`Server is running on port ${port}`));

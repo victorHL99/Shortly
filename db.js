@@ -6,20 +6,17 @@ dotenv.config();
 
 const {Pool} = pg;
 
-const user = process.env.DB_USER;
-const password = process.env.DB_PASSWORD;
-const host = process.env.DB_HOST;
-const port = process.env.DB_PORT;
-const database = process.env.DB_DATABASE;
+const databaseConfig = {
+    connectionString: process.env.DATABASE_URL,  
+}
 
-const db = new Pool({
-    user,
-    password,
-    host,
-    port,
-    database
-});
+if(process.env.MODE === "PROD"){
+    databaseConfig.ssl = {
+        rejectUnauthorized: false
+    }
+}
 
-    console.log(chalk.blue('Connected to database'));
+const db = new Pool(databaseConfig);
 
     export default db;
+
