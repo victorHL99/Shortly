@@ -6,8 +6,8 @@ export async function showRanking(req, res) {
             SELECT u.id, u.name, 
             COUNT(l."shortlyLink") AS "linksCount",
             CASE
-                WHEN COALESCE(SUM(l."views")) IS NULL THEN 0
-                ELSE COALESCE(SUM(l."views")) 
+                WHEN SUM(l."views") IS NULL THEN 0
+                ELSE SUM(l."views") 
             END AS "viewsMax"
             FROM users u 
             LEFT JOIN links l
